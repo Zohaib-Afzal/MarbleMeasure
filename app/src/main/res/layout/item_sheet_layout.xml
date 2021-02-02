@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TableRow
+        android:id="@+id/row1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#A9CDD5"
+        android:weightSum="4">
+
+        <TextView
+            android:id="@+id/serialTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:textSize="15dp"
+            android:padding="5dp"
+            android:text="1"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#E6E4E4"/>
+
+        <EditText
+            android:id="@+id/lengthEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="15dp"
+            android:text="50"
+            android:inputType="number"
+            android:padding="5dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:background="@drawable/sheet_inputs"
+            android:textColor="@color/black"
+            />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#E6E4E4"/>
+
+        <EditText
+            android:id="@+id/widthEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="15dp"
+            android:text="20"
+            android:inputType="number"
+            android:padding="5dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:background="@drawable/sheet_inputs"
+            android:textColor="@color/black"
+            />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#E6E4E4"/>
+
+        <TextView
+            android:id="@+id/resultTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:textSize="15dp"
+            android:text="1000.000"
+            android:padding="5dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            />
+
+    </TableRow>
+
+     <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E6E4E4"/>
+
+</TableLayout>

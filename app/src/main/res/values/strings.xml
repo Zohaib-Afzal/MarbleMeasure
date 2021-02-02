@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Master Measure</string>
+    <string name="navigation_open_drawer">Open Navigation Drawer</string>
+    <string name="navigation_close_drawer">Close Navigation Drawer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="input_type">
+        <item>Foot(ft)</item>
+        <item>Inch(in)</item>
+        <item>Meter(m)</item>
+        <item>Centimeter(cm)</item>
+    </string-array>
+</resources>

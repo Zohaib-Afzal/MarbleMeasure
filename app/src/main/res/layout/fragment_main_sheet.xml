@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/mainSheetFragment"
+    tools:context=".MainSheetFragment">
+<TableLayout
+    android:id="@+id/table_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/spinnerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:visibility="gone"
+        android:layout_marginBottom="4dp"
+        android:weightSum="4">
+        <Spinner
+            android:id="@+id/firstChoice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:spinnerMode="dropdown"
+            android:background="#017C87"
+            android:padding="5dp"
+            android:entries="@array/input_type"
+            android:layout_marginRight="1dp"/>
+        <Spinner
+            android:id="@+id/secondChoice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:spinnerMode="dropdown"
+            android:padding="5dp"
+            android:entries="@array/input_type"
+            android:background="#017C87"
+            android:layout_marginLeft="1dp"/>
+    </LinearLayout>
+    <TableRow
+        android:id="@+id/slabRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sheet_header"
+        android:padding="5dp"
+        android:visibility="gone"
+        android:weightSum="4">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:textSize="15dp"
+            android:text="SL."
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="15dp"
+            android:text="Length"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:padding="3dp"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="15dp"
+            android:text="Width"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:padding="3dp"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:textSize="15dp"
+            android:text="sq feet (ft)"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            />
+
+    </TableRow>
+
+
+    <TableRow
+        android:id="@+id/blockRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sheet_header"
+        android:padding="5dp"
+        android:visibility="gone"
+        android:weightSum="5">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:textSize="15dp"
+            android:text="SL."
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="15dp"
+            android:text="Length"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:padding="3dp"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="15dp"
+            android:text="Width"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:padding="3dp"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="15dp"
+            android:text="Height"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:padding="3dp"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:textSize="15dp"
+            android:text="sq feet (ft)"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            />
+
+    </TableRow>
+</TableLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sheetRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/table_layout"
+        android:layout_above="@id/copyPreviousButton"
+        android:layout_marginBottom="5dp"
+        android:visibility="gone"
+        android:orientation="vertical"
+        />
+
+    <RelativeLayout
+        android:id="@+id/addLayerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#EFECEC"
+        android:layout_below="@+id/table_layout">
+
+        <Button
+            android:id="@+id/addLayerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/add_layer_button_backgroud"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingVertical="5dp"
+            android:layout_centerInParent="true"
+            android:text="Add Layers"
+            android:textColor="@color/white"
+            android:textAllCaps="false"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/copyPreviousButton"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@drawable/dialog_button_background"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:text="Copy Previous Row"
+        android:textSize="12dp"
+        android:visibility="gone"
+        android:layout_above="@+id/subTotal"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"/>
+
+    <TextView
+        android:id="@+id/subTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:text="SubTotal:"
+        android:layout_marginRight="35dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="#017C87"
+        android:visibility="gone"
+        android:layout_above="@+id/more_buttons_layout"
+        />
+
+    <LinearLayout
+        android:id="@+id/more_buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_above="@id/backButton"
+        android:layout_marginBottom="5dp"
+        android:visibility="gone"
+        android:weightSum="5">
+
+        <Button
+            android:id="@+id/add_more_slabs_button"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/add_layer_button_backgroud"
+            android:layout_weight="2"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/white"
+            android:text="Add More Slabs"
+            android:textAllCaps="false"
+            android:drawableLeft="@drawable/add_white"
+            android:layout_gravity="center"
+            android:padding="10dp"/>
+
+        <ImageView
+            android:id="@+id/share_sheet_button"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight=".7"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:background="@drawable/share_sheet_button_background"
+            android:src="@drawable/share_white"
+            android:padding="7dp"/>
+
+        <Button
+            android:id="@+id/save_sheet_button"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_button_background"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:text="Save"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/buttons"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:text="Back"/>
+
+
+</RelativeLayout>

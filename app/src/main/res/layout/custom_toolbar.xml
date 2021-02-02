@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:maxHeight="?attr/actionBarSize"
+    android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+    android:background="#017C87">
+
+    <TextView
+        android:id="@+id/selectAnotherType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/backgroud_text"
+        android:text="   Select another type"
+        android:paddingLeft="15dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_marginRight="15dp"
+        app:drawableLeftCompat="@drawable/add_blue" />
+
+</androidx.appcompat.widget.Toolbar>

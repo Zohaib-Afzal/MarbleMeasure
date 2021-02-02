@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:id="@+id/add_new_sheet"
+        android:title="Add New Sheet"
+        android:icon="@drawable/add_grey"
+        android:iconTint="#D9E1E2"/>
+
+    <item android:id="@+id/saved_sheets"
+        android:title="Saved Sheets"
+        android:icon="@drawable/saved_sheet_grey"
+        android:iconTint="#D9E1E2"/>
+
+    <item android:id="@+id/how_to_use"
+        android:title="How To Use"
+        android:icon="@drawable/video_cam_grey"
+        android:iconTint="#D9E1E2"/>
+
+    <item android:id="@+id/rate_us"
+        android:title="Rate Us"
+        android:icon="@drawable/google_play"
+        android:iconTint="#D9E1E2"/>
+
+    <item android:id="@+id/share"
+        android:title="Share"
+        android:icon="@drawable/share_grey"
+        android:iconTint="#D9E1E2"/>
+
+    <item android:id="@+id/contact_us"
+        android:title="Contact Us"
+        android:icon="@drawable/person_grey"
+        android:iconTint="#D9E1E2"/>
+
+    <item android:id="@+id/check_updates"
+        android:title="Check Update"
+        android:icon="@drawable/update_grey"
+        android:iconTint="#D9E1E2"/>
+
+
+
+</menu>

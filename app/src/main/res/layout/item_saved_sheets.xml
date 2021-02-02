@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:background="#A9CDD5">
+
+    <ImageView
+        android:id="@+id/leftDraw"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/saved_sheets_start"
+        android:src="@drawable/document_black"
+        android:layout_centerVertical="true"
+        android:padding="12dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+    <LinearLayout
+        android:id="@+id/sheetDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/leftDraw"
+        android:layout_centerVertical="true"
+        >
+
+        <TextView
+            android:id="@+id/sheetPartyNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Party Name Goes Here"
+            android:textSize="15dp"/>
+
+        <TextView
+            android:id="@+id/sheetNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/calender"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/sheetSavedDateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text=" Saved Date Goes Here"
+                android:textSize="15dp"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        >
+
+        <ImageView
+            android:id="@+id/viewSheet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/sheetDetails"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:src="@drawable/view_sheet"/>
+
+        <ImageView
+            android:id="@+id/shareSheet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/sheetDetails"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:src="@drawable/share_sheet"/>
+
+        <ImageView
+            android:id="@+id/deleteSheet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/sheetDetails"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:src="@drawable/delete_sheet"/>
+
+        <ImageView
+            android:id="@+id/editSheet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/sheetDetails"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:src="@drawable/edit_sheet"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CAC9C9"/>
+
+</RelativeLayout>

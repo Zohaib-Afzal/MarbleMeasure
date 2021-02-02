@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/view_pager_1_bg">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginTop="150dp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/topText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="26sp"
+        android:layout_below="@id/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/white"
+        android:text="Welcome To Marble"/>
+
+    <TextView
+        android:id="@+id/belowText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="26sp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:text="Measurement Sheet"
+        android:layout_below="@id/topText"/>
+
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/belowText"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:text="There are 3 types of conversation product:"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/bullets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/desc"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:text="1. Granite.\n2. Marble.\n3. Block."
+        android:layout_marginLeft="20dp"/>
+
+</RelativeLayout>

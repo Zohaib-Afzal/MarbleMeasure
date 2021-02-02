@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".getSavedSheetsFragment">
+
+
+    <TextView
+        android:id="@+id/noRecorrdsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="26sp"
+        android:textColor="@color/black"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:text="No Saved Sheets Found"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/savedSheetsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/backButton"
+        />
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/buttons"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:text="Back"/>
+
+</RelativeLayout>
