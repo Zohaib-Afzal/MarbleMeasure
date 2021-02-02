@@ -53,7 +53,6 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
     Context context;
     List<sheetModelList> sheetList;
     List<sheetModelList> sheetListForPdf = new ArrayList<>();
-    Double resultGot;
     String sheetNo;
     private File pdfFile;
     long rows;
@@ -78,57 +77,11 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (sheetList != null && sheetList.size() > 0) {
             sheetModelList item = sheetList.get((position));
-            //holder.setIsRecyclable(false);
             holder.serial.setText(String.valueOf(position + 1));
-            holder.length.setText(item.getLength());
             holder.width.setText(item.getWidth());
+            holder.length.setText(item.getLength());
+
             holder.result.setText(item.getResult());
-          //  performCalculations(holder, total, choice1, choice2, position);
-
-            holder.length.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                    if (!holder.length.getText().toString().isEmpty() && !holder.width.getText().toString().isEmpty()) {
-                        item.setLength(s.toString());
-                        item.setWidth(holder.width.getText().toString());
-                        performCalculations(holder, total, choice1, choice2, holder.getAdapterPosition(), item.getWidth(), item.getLength());
-                    }
-                }
-            });
-
-            holder.width.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                    if (!holder.length.getText().toString().isEmpty() && !holder.width.getText().toString().isEmpty()) {
-                        item.setWidth(s.toString());
-                        item.setLength(holder.length.getText().toString());
-                        performCalculations(holder, total, choice1, choice2, holder.getAdapterPosition(), item.getWidth(), item.getLength());
-                    }
-
-                }
-            });
-
         } else {
             return;
         }
@@ -139,29 +92,18 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
         return super.getItemId(position);
     }
 
-    public void performCalculations(ViewHolder holder, Double total, String choice1, String choice2, int position, String width, String length) {
+    public String performCalculations(String length,String width, String choice1, String choice2, int position) {
         sheetModelList value = sheetList.get(position);
-       // holder.itemView.;
-       // if(!value.getWidth().equals(holder.width.getText().toString()) || !value.getLength().equals(holder.length.getText().toString())){
-//            String newWidth = holder.width.getText().toString();
-//            String newLength = holder.length.getText().toString();
-        if(width.isEmpty() || length.isEmpty()){
-            return;
-        }
-        String newWidth = width;
-        String newLength = length;
-            value.setLength(newLength);
-            value.setWidth(newWidth);
-       // }
-
+       // sheetModelList value = new sheetModelList();
+        value.setLength(length);
+            value.setWidth(width);
         double result = 0.0;
-
         if (choice1.equals(choice2)) {
-            if (!holder.length.getText().toString().isEmpty() && !holder.width.getText().toString().isEmpty()) {
+            if (!value.getLength().isEmpty() && !value.getWidth().isEmpty()) {
                 result = Double.parseDouble(value.getLength()) * Double.parseDouble(value.getWidth());
             }
         } else {
-            if (!holder.length.getText().toString().isEmpty() && !holder.width.getText().toString().isEmpty()) {
+            if (!value.getLength().isEmpty() && !value.getWidth().isEmpty()) {
 
                 if (choice1.equals("Inch(in)") && choice2.equals("Foot(ft)")) {
                     result = ((Double.parseDouble(value.getLength()) / 12) * (Double.parseDouble(value.getWidth()) / 12));
@@ -192,31 +134,15 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
         }
 
         value.setResult(String.valueOf(result));
-        holder.result.setText(String.valueOf(result));
         calculateSubtotal();
+        return value.getResult();
     }
-
-//    private void getResults(ViewHolder holder, Double total, Double result, int position) {
-//        if (!sheetList.get(position).getWidth().isEmpty() && !sheetList.get(position).getLength().isEmpty()) {
-//            holder.result.setText(String.valueOf(result));
-//            int id = Integer.parseInt(holder.serial.getText().toString());
-//            sheetModelList val = sheetList.get(id-1);
-//            val.setLength(length);
-//            val.setWidth(width);
-//            val.setResult(String.valueOf(result));
-//            total = total + result;
-//            MainSheetFragment.result = total;
-//            Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
     public Double calculateSubtotal() {
         total = 0.0;
         for (int i = 0; i < sheetList.size(); i++) {
             if (!sheetList.get(i).getResult().isEmpty())
                 total = Double.parseDouble(sheetList.get(i).getResult()) + total;
             MainSheetFragment.subTotalTextView.setText("Sub Total: " + roundTotal(total, 4));
-
         }
         MainSheetFragment.result = total;
         return total;
@@ -238,11 +164,9 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
                 width = sheetList.get(i).getWidth();
             }
         }
-
         sheetList.get(index + 1).setLength(length);
         sheetList.get(index + 1).setWidth(width);
         notifyDataSetChanged();
-
         Toast.makeText(context, "Index: " + index + "\nLength: " + length + "\nWidth: " + width, Toast.LENGTH_SHORT).show();
     }
 
@@ -364,7 +288,7 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
 
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements TextWatcher {
         TextView serial, result;
         EditText length, width;
 
@@ -374,6 +298,25 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
             result = itemView.findViewById(R.id.resultTextView);
             length = itemView.findViewById(R.id.lengthEditText);
             width = itemView.findViewById(R.id.widthEditText);
+            length.addTextChangedListener(this);
+            width.addTextChangedListener(this);
+
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+          String resultString =  performCalculations(length.getText().toString(), width.getText().toString(), choice1, choice2, getAdapterPosition());
+            result.setText(resultString);
         }
     }
 

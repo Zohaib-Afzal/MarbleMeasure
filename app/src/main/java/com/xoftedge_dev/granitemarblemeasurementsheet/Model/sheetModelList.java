@@ -12,6 +12,9 @@ public class sheetModelList {
         this.result = result;
     }
 
+    public sheetModelList() {
+    }
+
     public int getId() {
         return id;
     }
