@@ -203,6 +203,8 @@ public class sheetAdapterForBlocks extends RecyclerView.Adapter<sheetAdapterForB
         }
         //Must Updated the model class so that it has shows the
         //last calculated value when view is recycled
+        result = roundTotal(result,4);
+
         value.setResult(String.valueOf(result));
         calculateSubtotal();
         return String.valueOf(result);

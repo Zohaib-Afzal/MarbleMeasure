@@ -116,7 +116,13 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
                 public void afterTextChanged(Editable s) {
                     SheetModelList item = sheetList.get((getAdapterPosition()));
                     item.setLength(s.toString());
-                    result.setText(performCalculations(item));
+                   // if(performCalculations(item).isEmpty()){
+                        result.setText(performCalculations(item));
+//
+//                    } else {
+//                        result.setText(String.valueOf( roundTotal(Double.parseDouble(performCalculations(item)),4)));
+//
+//                    }
                     calculateSubtotal();
                 }
 
@@ -137,7 +143,14 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
                 public void afterTextChanged(Editable s) {
                     SheetModelList item = sheetList.get((getAdapterPosition()));
                     item.setWidth(s.toString());
-                    result.setText(performCalculations(item));
+                   // if(performCalculations(item).isEmpty()){
+                        result.setText(performCalculations(item));
+
+//                    } else {
+//                        result.setText(String.valueOf( roundTotal(Double.parseDouble(performCalculations(item)),4)));
+//
+//                    }
+
                     calculateSubtotal();
                 }
             });
@@ -186,6 +199,7 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
                 }
             }
         }
+        result = roundTotal(result,4);
 
         value.setResult(String.valueOf(result));
         calculateSubtotal();
