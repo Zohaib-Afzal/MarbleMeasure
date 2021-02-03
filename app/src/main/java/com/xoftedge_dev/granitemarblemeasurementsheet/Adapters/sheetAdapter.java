@@ -71,6 +71,7 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
         View view = LayoutInflater.from(context).inflate(R.layout.item_sheet_layout, parent, false);
         return new ViewHolder(view);
     }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (sheetList != null && sheetList.size() > 0) {
@@ -78,7 +79,6 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
             holder.serial.setText(String.valueOf(position + 1));
             holder.width.setText(item.getWidth());
             holder.length.setText(item.getLength());
-
             holder.result.setText(item.getResult());
         } else {
             return;
@@ -94,6 +94,7 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
     public int getItemCount() {
         return sheetList.size();
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView serial, result;
         EditText length, width;
@@ -116,13 +117,7 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
                 public void afterTextChanged(Editable s) {
                     SheetModelList item = sheetList.get((getAdapterPosition()));
                     item.setLength(s.toString());
-                   // if(performCalculations(item).isEmpty()){
-                        result.setText(performCalculations(item));
-//
-//                    } else {
-//                        result.setText(String.valueOf( roundTotal(Double.parseDouble(performCalculations(item)),4)));
-//
-//                    }
+                    result.setText(performCalculations(item));
                     calculateSubtotal();
                 }
 
@@ -143,14 +138,7 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
                 public void afterTextChanged(Editable s) {
                     SheetModelList item = sheetList.get((getAdapterPosition()));
                     item.setWidth(s.toString());
-                   // if(performCalculations(item).isEmpty()){
-                        result.setText(performCalculations(item));
-
-//                    } else {
-//                        result.setText(String.valueOf( roundTotal(Double.parseDouble(performCalculations(item)),4)));
-//
-//                    }
-
+                    result.setText(performCalculations(item));
                     calculateSubtotal();
                 }
             });
@@ -199,12 +187,13 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
                 }
             }
         }
-        result = roundTotal(result,4);
+        result = roundTotal(result, 4);
 
         value.setResult(String.valueOf(result));
-        calculateSubtotal();
+        //calculateSubtotal();
         return value.getResult();
     }
+
     public Double calculateSubtotal() {
         total = 0.0;
         for (int i = 0; i < sheetList.size(); i++) {

@@ -3,6 +3,7 @@ package com.xoftedge_dev.granitemarblemeasurementsheet;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -56,7 +57,7 @@ public class MainSheetFragment extends Fragment {
     public static List<SheetModelForBlocks> newSheetListForBlock = new ArrayList<>();
     private EditText lengthEditText, widthEditText, numRowsEditText;
     private TextView serialTextView, resultTextView;
-    public static TextView subTotalTextView;
+    public static TextView subTotalTextView, unitTextView;
     private Button addLayerButton, okButton, backButton, copyPreviousRowButton, addMoreRowsButton, saveButton;
     private RelativeLayout dialog_container, addLayerLayout;
     private AlertDialog dialog;
@@ -72,6 +73,8 @@ public class MainSheetFragment extends Fragment {
     private Spinner spinner1, spinner2;
     private TableRow blockRow, slabRow;
     public static String choice1, choice2;
+    public static String unit;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,8 +117,13 @@ public class MainSheetFragment extends Fragment {
                 adapterBlock.notifyDataSetChanged();
                 saveButton.setText("Update");
                 sheetNo = Long.parseLong(savedList.get(0).getSheetNumber());
+                ((TextView)spinner1.getChildAt(0)).setTextColor(Color.WHITE);
+                ((TextView)spinner2.getChildAt(0)).setTextColor(Color.WHITE);
             }
         }
+        //if(spinner1.is)
+
+
         choice2 = spinner2.getSelectedItem().toString();
         choice1 = spinner1.getSelectedItem().toString();
         subTotalTextView.setText("Sub Total: " + result);
@@ -135,6 +143,10 @@ public class MainSheetFragment extends Fragment {
                 Object item = parent.getItemAtPosition(position);
                 spinnerPosition1 = position;
                 choice1 = item.toString();
+
+                //set color of spinner items
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+
                 if (selectionType.equals("slab")) {
                     adapter.notifyDataSetChanged();
                    // adapter.notifyAll();
@@ -154,6 +166,14 @@ public class MainSheetFragment extends Fragment {
                 Object item = parent.getItemAtPosition(position);
                 spinnerPosition2 = position;
                 choice2 = item.toString();
+               // changing unit according to choice selectd
+                unitTextView.setText("sq " + choice2);
+
+                //set color of spinner items
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+
+
+
                 if (selectionType.equals("slab")) {
                     adapter.notifyDataSetChanged();
                 } else {
@@ -352,6 +372,7 @@ public class MainSheetFragment extends Fragment {
         backButton = (Button) v.findViewById(id.backButton);
         copyPreviousRowButton = (Button) v.findViewById(id.copyPreviousButton);
         subTotalTextView = (TextView) v.findViewById(id.subTotal);
+        unitTextView = v.findViewById(id.unit);
         addMoreRowsButton = (Button) v.findViewById(id.add_more_slabs_button);
         shareSheetButton = (ImageView) v.findViewById(id.share_sheet_button);
         saveButton = (Button) v.findViewById(id.save_sheet_button);
