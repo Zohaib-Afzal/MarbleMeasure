@@ -1,18 +1,18 @@
 package com.xoftedge_dev.granitemarblemeasurementsheet.Model;
 
-public class sheetModelList {
+public class SheetModelList {
     public int id;
     public String length, width;
     public String result;
 
-    public sheetModelList(int id, String length, String width, String result) {
+    public SheetModelList(int id, String length, String width, String result) {
         this.id = id;
         this.length = length;
         this.width = width;
         this.result = result;
     }
 
-    public sheetModelList() {
+    public SheetModelList() {
     }
 
     public int getId() {

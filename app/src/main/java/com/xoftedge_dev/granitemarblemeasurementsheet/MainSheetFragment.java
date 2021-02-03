@@ -31,7 +31,7 @@ import com.xoftedge_dev.granitemarblemeasurementsheet.Adapters.sheetAdapterForBl
 import com.xoftedge_dev.granitemarblemeasurementsheet.Database.DatabaseHelper;
 import com.xoftedge_dev.granitemarblemeasurementsheet.Model.SavedSheetModel;
 import com.xoftedge_dev.granitemarblemeasurementsheet.Model.SheetModelForBlocks;
-import com.xoftedge_dev.granitemarblemeasurementsheet.Model.sheetModelList;
+import com.xoftedge_dev.granitemarblemeasurementsheet.Model.SheetModelList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +49,8 @@ public class MainSheetFragment extends Fragment {
     private LinearLayout spinnerLayout, moreButtons;
     private RecyclerView sheetRecyclerView;
     private long sheetNo;
-    public static List<sheetModelList> sheetListMain = new ArrayList<>();
-    public static List<sheetModelList> newSheetList = new ArrayList<>();
+    public static List<SheetModelList> sheetListMain = new ArrayList<>();
+    public static List<SheetModelList> newSheetList = new ArrayList<>();
     private ProgressDialog progressDialog;
     public static List<SheetModelForBlocks> sheetListMainForBlock = new ArrayList<>();
     public static List<SheetModelForBlocks> newSheetListForBlock = new ArrayList<>();
@@ -104,7 +104,9 @@ public class MainSheetFragment extends Fragment {
             if (action.equals("update")) {
                 addListToUpdate(savedList);
                 sheetRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapterBlock = new sheetAdapterForBlocks(getContext(), newSheetListForBlock, databaseHelper);
+                sheetRecyclerView.setHasFixedSize(true);
+
+                adapterBlock = new sheetAdapterForBlocks(getContext(), newSheetListForBlock);
                 List<String> pos = adapterBlock.setSpinnerItems(savedList.get(0).getSheetNumber());
                 spinner1.setSelection(Integer.parseInt(pos.get(0)), true);
                 spinner2.setSelection(Integer.parseInt(pos.get(1)), true);
@@ -250,11 +252,11 @@ public class MainSheetFragment extends Fragment {
                 sheetRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 sheetRecyclerView.setHasFixedSize(true);
                 adapter = new sheetAdapter(getContext(), sheetListMain);
-                adapter.setHasStableIds(true);
                 sheetRecyclerView.setAdapter(adapter);
             } else {
                 sheetRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapterBlock = new sheetAdapterForBlocks(getContext(), sheetListMainForBlock, databaseHelper);
+                sheetRecyclerView.setHasFixedSize(true);
+                adapterBlock = new sheetAdapterForBlocks(getContext(), sheetListMainForBlock);
                 sheetRecyclerView.setAdapter(adapterBlock);
             }
 
@@ -312,7 +314,7 @@ public class MainSheetFragment extends Fragment {
                 newSheetList.clear();
                 int id = 1;
                 for (SavedSheetModel sheet : list) {
-                    newSheetList.add(new sheetModelList(id, sheet.getLength(), sheet.getWidth(), sheet.getResult()));
+                    newSheetList.add(new SheetModelList(id, sheet.getLength(), sheet.getWidth(), sheet.getResult()));
                     //result = result + Double.parseDouble(sheet.getResult());
                     id++;
                 }
@@ -387,9 +389,9 @@ public class MainSheetFragment extends Fragment {
         if (selectionType.equals("slab")) {
             for (int i = 0; i < numRows; i++) {
                 if (action.equals("normal")) {
-                    sheetListMain.add(new sheetModelList(i + 1,"","", ""));
+                    sheetListMain.add(new SheetModelList(i + 1,"","", ""));
                 } else {
-                    newSheetList.add(new sheetModelList(i + 1, "", "", ""));
+                    newSheetList.add(new SheetModelList(i + 1, "", "", ""));
                 }
 
             }

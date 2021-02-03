@@ -8,14 +8,10 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
-
-import androidx.annotation.Nullable;
 
 import com.xoftedge_dev.granitemarblemeasurementsheet.Adapters.savedSheetsAdapter;
-import com.xoftedge_dev.granitemarblemeasurementsheet.MainSheetFragment;
 import com.xoftedge_dev.granitemarblemeasurementsheet.Model.SheetModelForBlocks;
-import com.xoftedge_dev.granitemarblemeasurementsheet.Model.sheetModelList;
+import com.xoftedge_dev.granitemarblemeasurementsheet.Model.SheetModelList;
 import com.xoftedge_dev.granitemarblemeasurementsheet.util.UtilDatabase;
 
 import java.util.List;
@@ -141,12 +137,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean addSheetSlab(List<sheetModelList> providedSheet, String type, long sheetNumber, String date, String partyName, String choice1, String choice2){
+    public boolean addSheetSlab(List<SheetModelList> providedSheet, String type, long sheetNumber, String date, String partyName, String choice1, String choice2){
         SQLiteDatabase db = getWritableDatabase();
         String serial, length, width, result;
         long response = 0;
 
-        for (sheetModelList sheet:providedSheet
+        for (SheetModelList sheet:providedSheet
              ) {
 
             serial = String.valueOf(sheet.getId());
@@ -267,12 +263,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void updateRecordsSlab(List<sheetModelList> providedSheet, String sheetType, long sheetNumber, String date, String partyName, int choice1, int choice2){
+    public void updateRecordsSlab(List<SheetModelList> providedSheet, String sheetType, long sheetNumber, String date, String partyName, int choice1, int choice2){
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         String serial, length, width, result;
         long response = 0;
-        for (sheetModelList sheet:providedSheet) {
+        for (SheetModelList sheet:providedSheet) {
             length = sheet.getLength();
             width = sheet.getWidth();
             result = sheet.getResult();

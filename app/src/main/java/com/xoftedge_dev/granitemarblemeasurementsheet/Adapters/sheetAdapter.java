@@ -29,9 +29,8 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.xoftedge_dev.granitemarblemeasurementsheet.Database.DatabaseHelper;
 import com.xoftedge_dev.granitemarblemeasurementsheet.MainSheetFragment;
-import com.xoftedge_dev.granitemarblemeasurementsheet.Model.sheetModelList;
+import com.xoftedge_dev.granitemarblemeasurementsheet.Model.SheetModelList;
 import com.xoftedge_dev.granitemarblemeasurementsheet.R;
-import com.xoftedge_dev.granitemarblemeasurementsheet.util.UtilDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -51,15 +50,15 @@ import static com.xoftedge_dev.granitemarblemeasurementsheet.MainSheetFragment.s
 public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> {
 
     Context context;
-    List<sheetModelList> sheetList;
-    List<sheetModelList> sheetListForPdf = new ArrayList<>();
+    List<SheetModelList> sheetList;
+    List<SheetModelList> sheetListForPdf = new ArrayList<>();
     String sheetNo;
     private File pdfFile;
     long rows;
     public static Double total = 0.0;
     DatabaseHelper databaseHelper;
 
-    public sheetAdapter(Context context, List<sheetModelList> sheetList) {
+    public sheetAdapter(Context context, List<SheetModelList> sheetList) {
         this.context = context;
         this.sheetList = sheetList;
         this.databaseHelper = new DatabaseHelper(context);
@@ -72,11 +71,10 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
         View view = LayoutInflater.from(context).inflate(R.layout.item_sheet_layout, parent, false);
         return new ViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (sheetList != null && sheetList.size() > 0) {
-            sheetModelList item = sheetList.get((position));
+            SheetModelList item = sheetList.get((position));
             holder.serial.setText(String.valueOf(position + 1));
             holder.width.setText(item.getWidth());
             holder.length.setText(item.getLength());
@@ -92,11 +90,67 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
         return super.getItemId(position);
     }
 
-    public String performCalculations(String length,String width, String choice1, String choice2, int position) {
-        sheetModelList value = sheetList.get(position);
-       // sheetModelList value = new sheetModelList();
-        value.setLength(length);
-            value.setWidth(width);
+    @Override
+    public int getItemCount() {
+        return sheetList.size();
+    }
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView serial, result;
+        EditText length, width;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            serial = itemView.findViewById(R.id.serialTextView);
+            result = itemView.findViewById(R.id.resultTextView);
+            length = itemView.findViewById(R.id.lengthEditText);
+            length.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    SheetModelList item = sheetList.get((getAdapterPosition()));
+                    item.setLength(s.toString());
+                    result.setText(performCalculations(item));
+                    calculateSubtotal();
+                }
+
+            });
+            width = itemView.findViewById(R.id.widthEditText);
+            width.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    SheetModelList item = sheetList.get((getAdapterPosition()));
+                    item.setWidth(s.toString());
+                    result.setText(performCalculations(item));
+                    calculateSubtotal();
+                }
+            });
+
+        }
+    }
+
+    public String performCalculations(SheetModelList value) {
+        // Early Exit if you don't have the required data to perform the calculation
+        if (value.width.isEmpty() || value.length.isEmpty()) {
+            return "";
+        }
+
         double result = 0.0;
         if (choice1.equals(choice2)) {
             if (!value.getLength().isEmpty() && !value.getWidth().isEmpty()) {
@@ -148,10 +202,6 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
         return total;
     }
 
-    @Override
-    public int getItemCount() {
-        return sheetList.size();
-    }
 
     public void copyPreviousRow() {
         String length = "", width = "", result = "";
@@ -179,7 +229,7 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
         Boolean response = databaseHelper.addSheetSlab(sheetList, getSheetType, rows + 1, date, partyName, String.valueOf(spinnerPosition1), String.valueOf(spinnerPosition2));
         if (response) {
             Toast.makeText(context, "Saved Successfully!", Toast.LENGTH_SHORT).show();
-            List<sheetModelList> listForPdf = selectRecordToGenerateSlabPdf();
+            List<SheetModelList> listForPdf = selectRecordToGenerateSlabPdf();
             saveAsPdf(listForPdf, getSheetType, date, partyName);
             sheetList.clear();
         } else {
@@ -199,7 +249,7 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
         return positions;
     }
 
-    private void saveAsPdf(List<sheetModelList> listForPdf, String getType, String date, String partyName) {
+    private void saveAsPdf(List<SheetModelList> listForPdf, String getType, String date, String partyName) {
         File graniteMarbleFolder = new File(context.getExternalFilesDir("/") + "/MasterMarble");
         if (!graniteMarbleFolder.exists()) {
             graniteMarbleFolder.mkdir();
@@ -272,10 +322,10 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
 
     }
 
-    private List<sheetModelList> selectRecordToGenerateSlabPdf() {
+    private List<SheetModelList> selectRecordToGenerateSlabPdf() {
         Cursor cursor = databaseHelper.getDataToGeneratePdfSlab(sheetNo);
         while (cursor.moveToNext()) {
-            sheetListForPdf.add(new sheetModelList(cursor.getInt(1), cursor.getString(2), cursor.getString(3), cursor.getString(4)));
+            sheetListForPdf.add(new SheetModelList(cursor.getInt(1), cursor.getString(2), cursor.getString(3), cursor.getString(4)));
         }
         return sheetListForPdf;
     }
@@ -286,38 +336,6 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
         sheetList.clear();
         sheetListForPdf.clear();
 
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements TextWatcher {
-        TextView serial, result;
-        EditText length, width;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            serial = itemView.findViewById(R.id.serialTextView);
-            result = itemView.findViewById(R.id.resultTextView);
-            length = itemView.findViewById(R.id.lengthEditText);
-            width = itemView.findViewById(R.id.widthEditText);
-            length.addTextChangedListener(this);
-            width.addTextChangedListener(this);
-
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-          String resultString =  performCalculations(length.getText().toString(), width.getText().toString(), choice1, choice2, getAdapterPosition());
-            result.setText(resultString);
-        }
     }
 
     private double roundTotal(double value, int scale) {

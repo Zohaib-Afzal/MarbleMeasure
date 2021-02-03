@@ -30,6 +30,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.xoftedge_dev.granitemarblemeasurementsheet.Database.DatabaseHelper;
 import com.xoftedge_dev.granitemarblemeasurementsheet.MainSheetFragment;
 import com.xoftedge_dev.granitemarblemeasurementsheet.Model.SheetModelForBlocks;
+import com.xoftedge_dev.granitemarblemeasurementsheet.Model.SheetModelList;
 import com.xoftedge_dev.granitemarblemeasurementsheet.R;
 import com.xoftedge_dev.granitemarblemeasurementsheet.util.UtilDatabase;
 
@@ -61,10 +62,10 @@ public class sheetAdapterForBlocks extends RecyclerView.Adapter<sheetAdapterForB
     DatabaseHelper databaseHelper;
     private Double subTotal;
 
-    public sheetAdapterForBlocks(Context context, List<SheetModelForBlocks> sheetListForBlocks, DatabaseHelper databaseHelper) {
+    public sheetAdapterForBlocks(Context context, List<SheetModelForBlocks> sheetListForBlocks) {
         this.context = context;
         this.sheetListForBlocks = sheetListForBlocks;
-        this.databaseHelper = databaseHelper;
+        this.databaseHelper =  new DatabaseHelper(context);
     }
 
     @NonNull
@@ -79,235 +80,150 @@ public class sheetAdapterForBlocks extends RecyclerView.Adapter<sheetAdapterForB
 
         if (sheetListForBlocks != null && sheetListForBlocks.size() > 0){
 
-            SheetModelForBlocks sheet_list = sheetListForBlocks.get(position);
+            SheetModelForBlocks item = sheetListForBlocks.get(position);
             holder.serial.setText(String.valueOf(position+1));
-            holder.length.setText(sheet_list.getLength());
-            holder.width.setText(sheet_list.getWidth());
-            holder.height.setText(sheet_list.getHeight());
-            holder.result.setText(sheet_list.getResult());
+            holder.length.setText(item.getLength());
+            holder.width.setText(item.getWidth());
+            holder.height.setText(item.getHeight());
+            holder.result.setText(item.getResult());
 
-            holder.length.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                    if (!holder.length.getText().toString().isEmpty() && !holder.width.getText().toString().isEmpty() && !holder.height.getText().toString().isEmpty()) {
-
-                        performCalculations(holder, total, choice1, choice2);
-                        grandTotal = 0.0;
-                    }
-                }
-            });
-
-            holder.width.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (!holder.length.getText().toString().isEmpty() && !holder.width.getText().toString().isEmpty() && !holder.height.getText().toString().isEmpty()) {
-                        performCalculations(holder, total, choice1, choice2);
-                        grandTotal = 0.0;
-                    }
-
-
-                }
-            });
-
-            holder.height.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (!holder.length.getText().toString().isEmpty() && !holder.width.getText().toString().isEmpty() && !holder.height.getText().toString().isEmpty()){
-                        performCalculations(holder, total, choice1, choice2);
-                        grandTotal = 0.0;
-                    }
-                }
-            });
         }else{
             return;
         }
 
     }
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-    private void performCalculations(ViewHolder holder, Double total, String choice1, String choice2) {
+        TextView serial, result;
+        EditText length, width, height;
 
-        if (choice1.equals(choice2)){
-            if (!holder.length.getText().toString().isEmpty() && !holder.width.getText().toString().isEmpty()) {
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            serial = (TextView)itemView.findViewById(R.id.serialTextView);
+            result = (TextView)itemView.findViewById(R.id.resultTextView);
+            length = (EditText) itemView.findViewById(R.id.lengthEditText);
+            length.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                length = holder.length.getText().toString();
-                width = holder.width.getText().toString();
-                height = holder.height.getText().toString();
+                }
 
-                Double result = Double.parseDouble(length) * Double.parseDouble(width) * Double.parseDouble(height);
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+                }
 
-                Double subTotal = calculateSubtotal();
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    SheetModelForBlocks item = sheetListForBlocks.get((getAdapterPosition()));
+                    item.setLength(editable.toString());
+                    result.setText(performCalculations(item));
+                    calculateSubtotal();
+                }
+            });
+            width = (EditText)itemView.findViewById(R.id.widthEditText);
+            width.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                getResults(holder, subTotal, result);
-            }
-        }else{
-            if (choice1.equals("Inch(in)") && choice2.equals("Foot(ft)")){
-                grandTotal = 0.0;
-                length = holder.length.getText().toString();
-                width = holder.width.getText().toString();
-                height = holder.height.getText().toString();
-                Double result = ((Double.parseDouble(length) / 12) * (Double.parseDouble(width) / 12) * (Double.parseDouble(height) / 12));
-                grandTotal = grandTotal+result;
-                getResults(holder, total, result);
+                }
 
-            }else if (choice1.equals("Inch(in)") && choice2.equals("Meter(m)")){
-                grandTotal = 0.0;
-                length = holder.length.getText().toString();
-                width = holder.width.getText().toString();
-                height = holder.height.getText().toString();
-                Double result = ((Double.parseDouble(length) / 39.37008) * (Double.parseDouble(width) / 39.37008) * (Double.parseDouble(height) / 39.37008));
-                grandTotal = grandTotal+result;
-                getResults(holder, total, result);
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }else if (choice1.equals("Inch(in)") && choice2.equals("Centimeter(cm)")){
-                grandTotal = 0.0;
-                length = holder.length.getText().toString();
-                width = holder.width.getText().toString();
-                height = holder.height.getText().toString();
-                Double result = ((Double.parseDouble(length) * 2.54) * (Double.parseDouble(width) * 2.54) * (Double.parseDouble(height) * 2.54));
-                grandTotal = grandTotal + result;
-                getResults(holder, total, result);
+                }
 
-            }else if (choice1.equals("Foot(ft)") && choice2.equals("Inch(in)")){
-                grandTotal = 0.0;
-                length = holder.length.getText().toString();
-                width = holder.width.getText().toString();
-                height = holder.height.getText().toString();
-                Double result = ((Double.parseDouble(length) * 12) * (Double.parseDouble(width) * 12) * (Double.parseDouble(height) * 12));
-                grandTotal = grandTotal+result;
-                getResults(holder, total, result);
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    SheetModelForBlocks item = sheetListForBlocks.get((getAdapterPosition()));
+                    item.setWidth(editable.toString());
+                    result.setText(performCalculations(item));
+                    calculateSubtotal();
+                }
+            });
+            height = (EditText)itemView.findViewById(R.id.heightEditText);
+            height.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }else if (choice1.equals("Foot(ft)") && choice2.equals("Meter(m)")){
-                grandTotal = 0.0;
-                length = holder.length.getText().toString();
-                width = holder.width.getText().toString();
-                height = holder.height.getText().toString();
-                Double result = ((Double.parseDouble(length) / 3.280484) * (Double.parseDouble(width) / 3.280484) * (Double.parseDouble(height) / 3.280484));
-                grandTotal = grandTotal + result;
-                getResults(holder, total, result);
+                }
 
-            }else if (choice1.equals("Foot(ft)") && choice2.equals("Centimeter(cm)")){
-                grandTotal = 0.0;
-                length = holder.length.getText().toString();
-                width = holder.width.getText().toString();
-                height = holder.height.getText().toString();
-                Double result = ((Double.parseDouble(length) * 30.48) * (Double.parseDouble(width) * 30.48) * (Double.parseDouble(height) * 30.48));
-                grandTotal = grandTotal + result;
-                getResults(holder, total, result);
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }else if (choice1.equals("Meter(m)") && choice2.equals("Foot(ft)")){
-                grandTotal = 0.0;
-                length = holder.length.getText().toString();
-                width = holder.width.getText().toString();
-                height = holder.height.getText().toString();
-                Double result = ((Double.parseDouble(length) * 3.280484) * (Double.parseDouble(width) * 3.280484) * (Double.parseDouble(height) * 3.280484));
-                grandTotal = grandTotal + result;
-                getResults(holder, total, result);
+                }
 
-            }else if(choice1.equals("Meter(m)") && choice2.equals("Inch(in)")){
-                grandTotal = 0.0;
-                length = holder.length.getText().toString();
-                width = holder.width.getText().toString();
-                height = holder.height.getText().toString();
-                Double result = ((Double.parseDouble(length) * 39.37008) * (Double.parseDouble(width) * 39.37008) * (Double.parseDouble(height) * 39.37008));
-                grandTotal = grandTotal+result;
-                getResults(holder, total, result);
-
-            }else if (choice1.equals("Meter(m)") && choice2.equals("Centimeter(cm)")){
-                grandTotal = 0.0;
-                length = holder.length.getText().toString();
-                width = holder.width.getText().toString();
-                height = holder.height.getText().toString();
-                Double result = ((Double.parseDouble(length) * 100) * (Double.parseDouble(width) * 100) * (Double.parseDouble(height) * 100));
-                grandTotal = grandTotal+result;
-                getResults(holder, total, result);
-
-            }else if (choice1.equals("Centimeter(cm)") && choice2.equals("Foot(ft)")){
-                grandTotal = 0.0;
-                length = holder.length.getText().toString();
-                width = holder.width.getText().toString();
-                height = holder.height.getText().toString();
-                Double result = ((Double.parseDouble(length) / 0.032808) * (Double.parseDouble(width) / 0.032808) * (Double.parseDouble(height) / 0.032808));
-                grandTotal = grandTotal + result;
-                getResults(holder, total, result);
-
-            }else if (choice1.equals("Centimeter(cm)") && choice2.equals("Inch(in)")){
-                grandTotal = 0.0;
-                length = holder.length.getText().toString();
-                width = holder.width.getText().toString();
-                height = holder.height.getText().toString();
-                Double result = ((Double.parseDouble(length) / 0.393701) * (Double.parseDouble(width) / 0.393701) * (Double.parseDouble(height) / 0.393701));
-                grandTotal = grandTotal+result;
-                getResults(holder, total, result);
-
-            }else if(choice1.equals("Centimeter(cm)") && choice2.equals("Meter(m)")){
-                grandTotal = 0.0;
-                length = holder.length.getText().toString();
-                width = holder.width.getText().toString();
-                height = holder.height.getText().toString();
-                Double result = ((Double.parseDouble(length) / 100) * (Double.parseDouble(width) / 100) * (Double.parseDouble(height) / 100));
-                grandTotal = grandTotal + result;
-                getResults(holder, total, result);
-
-            }
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    SheetModelForBlocks item = sheetListForBlocks.get((getAdapterPosition()));
+                    item.setHeight(editable.toString());
+                    result.setText(performCalculations(item));
+                    calculateSubtotal();
+                }
+            });
         }
     }
 
-    private void getResults(ViewHolder holder, Double total, Double result) {
-        if (!width.isEmpty() && !length.isEmpty() && !height.isEmpty()) {
-            grandTotal = 0.0;
-            holder.result.setText(String.valueOf(result));
-            int id = Integer.parseInt(holder.serial.getText().toString());
-            sheetListForBlocks.get(id - 1).setLength(length);
-            sheetListForBlocks.get(id - 1).setWidth(width);
-            sheetListForBlocks.get(id - 1).setHeight(height);
-            sheetListForBlocks.get(id - 1).setResult(String.valueOf(result));
-            total = total + result;
-            MainSheetFragment.result = total;
-            Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
+    public String performCalculations(SheetModelForBlocks value) {
+        // Early Exit if you don't have the required data to perform the calculation
+        if (value.width.isEmpty() || value.length.isEmpty() || value.height.isEmpty()) {
+            return "";
         }
+        double result = 0.0;
+
+        if (choice1.equals(choice2)) {
+            result = Double.parseDouble(value.getLength()) * Double.parseDouble(value.getWidth()) * Double.parseDouble(value.getHeight());
+        } else {
+
+            if (choice1.equals("Inch(in)") && choice2.equals("Foot(ft)")) {
+                result = ((Double.parseDouble(value.getLength()) / 12) * (Double.parseDouble(value.getWidth()) / 12) * (Double.parseDouble(value.getHeight()) / 12));
+            } else if (choice1.equals("Inch(in)") && choice2.equals("Meter(m)")) {
+                result = ((Double.parseDouble(value.getLength()) / 39.37008) * (Double.parseDouble(value.getWidth()) / 39.37008) * (Double.parseDouble(value.getHeight()) / 39.37008));
+            } else if (choice1.equals("Inch(in)") && choice2.equals("Centimeter(cm)")) {
+                result = ((Double.parseDouble(value.getLength()) * 2.54) * (Double.parseDouble(value.getWidth()) * 2.54) * (Double.parseDouble(value.getHeight()) * 2.54));
+            } else if (choice1.equals("Foot(ft)") && choice2.equals("Inch(in)")) {
+                result = ((Double.parseDouble(value.getLength()) * 12) * (Double.parseDouble(value.getWidth()) * 12) * (Double.parseDouble(value.getHeight()) * 12));
+            } else if (choice1.equals("Foot(ft)") && choice2.equals("Meter(m)")) {
+                result = ((Double.parseDouble(value.getLength()) / 3.280484) * (Double.parseDouble(value.getWidth()) / 3.280484) * (Double.parseDouble(value.getHeight()) / 3.280484));
+            } else if (choice1.equals("Foot(ft)") && choice2.equals("Centimeter(cm)")) {
+                result = ((Double.parseDouble(value.getLength()) * 30.48) * (Double.parseDouble(value.getWidth()) * 30.48) * (Double.parseDouble(value.getHeight()) * 30.48));
+            } else if (choice1.equals("Meter(m)") && choice2.equals("Foot(ft)")) {
+                result = ((Double.parseDouble(value.getLength()) * 3.280484) * (Double.parseDouble(value.getWidth()) * 3.280484) * (Double.parseDouble(value.getHeight()) * 3.280484));
+            } else if (choice1.equals("Meter(m)") && choice2.equals("Inch(in)")) {
+                result = ((Double.parseDouble(value.getLength()) * 39.37008) * (Double.parseDouble(value.getWidth()) * 39.37008) * (Double.parseDouble(value.getHeight()) * 39.37008));
+            } else if (choice1.equals("Meter(m)") && choice2.equals("Centimeter(cm)")) {
+                result = ((Double.parseDouble(value.getLength()) * 100) * (Double.parseDouble(value.getWidth()) * 100) * (Double.parseDouble(value.getHeight()) * 100) );
+            } else if (choice1.equals("Centimeter(cm)") && choice2.equals("Foot(ft)")) {
+                result = ((Double.parseDouble(value.getLength()) / 0.032808) * (Double.parseDouble(value.getWidth()) / 0.032808) * (Double.parseDouble(value.getHeight()) / 0.032808));
+            } else if (choice1.equals("Centimeter(cm)") && choice2.equals("Inch(in)")) {
+                result = ((Double.parseDouble(value.getLength()) / 0.393701) * (Double.parseDouble(value.getWidth()) / 0.393701) * (Double.parseDouble(value.getHeight()) / 0.393701));
+            } else if (choice1.equals("Centimeter(cm)") && choice2.equals("Meter(m)")) {
+                result = ((Double.parseDouble(value.getLength()) / 100) * (Double.parseDouble(value.getWidth()) / 100) * (Double.parseDouble(value.getHeight()) / 100));
+            }
+        }
+        //Must Updated the model class so that it has shows the
+        //last calculated value when view is recycled
+        value.setResult(String.valueOf(result));
+        calculateSubtotal();
+        return String.valueOf(result);
     }
 
-    public Double calculateSubtotal(){
+
+    public Double calculateSubtotal() {
         total = 0.0;
-        for (int i =0; i<sheetListForBlocks.size(); i++){
+        for (int i = 0; i < sheetListForBlocks.size(); i++) {
             if (!sheetListForBlocks.get(i).getResult().isEmpty())
                 total = Double.parseDouble(sheetListForBlocks.get(i).getResult()) + total;
-            MainSheetFragment.subTotalTextView.setText("Sub Total: "+ total);
+            MainSheetFragment.subTotalTextView.setText("Sub Total: " + roundTotal(total, 4));
 
         }
-
+        MainSheetFragment.result = total;
         return total;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
     }
 
     @Override
@@ -465,19 +381,8 @@ public class sheetAdapterForBlocks extends RecyclerView.Adapter<sheetAdapterForB
         }
         return positions;
     }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView serial, result;
-        EditText length, width, height;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            serial = (TextView)itemView.findViewById(R.id.serialTextView);
-            result = (TextView)itemView.findViewById(R.id.resultTextView);
-            length = (EditText) itemView.findViewById(R.id.lengthEditText);
-            width = (EditText)itemView.findViewById(R.id.widthEditText);
-            height = (EditText)itemView.findViewById(R.id.heightEditText);
-        }
+    private double roundTotal(double value, int scale) {
+        return Math.round(value * Math.pow(10, scale)) / Math.pow(10, scale);
     }
+
 }

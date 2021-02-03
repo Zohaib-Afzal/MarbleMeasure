@@ -3,14 +3,13 @@ package com.xoftedge_dev.granitemarblemeasurementsheet.Model;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SheetsDiffUtils extends DiffUtil.Callback {
-    private List<sheetModelList> oldSheetList;
-    private List<sheetModelList> newSheetList;
+    private List<SheetModelList> oldSheetList;
+    private List<SheetModelList> newSheetList;
 
-    public SheetsDiffUtils(List<sheetModelList> oldSheetList, List<sheetModelList> newSheetList) {
+    public SheetsDiffUtils(List<SheetModelList> oldSheetList, List<SheetModelList> newSheetList) {
         this.oldSheetList = oldSheetList;
         this.newSheetList = newSheetList;
     }

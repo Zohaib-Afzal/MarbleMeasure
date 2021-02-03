@@ -1,8 +1,8 @@
 package com.xoftedge_dev.granitemarblemeasurementsheet.Model;
 
 public class SheetModelForBlocks {
-    int id;
-    String length, width, height, result;
+    public int id;
+    public String length, width, height, result;
 
     public SheetModelForBlocks(int id, String length, String width, String height, String result) {
         this.id = id;
