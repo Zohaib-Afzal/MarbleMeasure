@@ -12,6 +12,9 @@ public class SheetModelForBlocks {
         this.result = result;
     }
 
+    public SheetModelForBlocks() {
+    }
+
     public int getId() {
         return id;
     }

@@ -8,6 +8,7 @@ import androidx.cardview.widget.CardView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,7 @@ public class SelectionActivity extends AppCompatActivity {
         selectionToolbar = (Toolbar)findViewById(R.id.custom_sel_toolbar);
         setSupportActionBar(selectionToolbar);
         selectionToolbar.setTitle("");
+        selectionToolbar.setTitleTextColor(Color.WHITE);
         ActionBar actionBar = getSupportActionBar();
 //        actionBar.setDisplayHomeAsUpEnabled(true);
 //        actionBar.setDisplayShowCustomEnabled(true);

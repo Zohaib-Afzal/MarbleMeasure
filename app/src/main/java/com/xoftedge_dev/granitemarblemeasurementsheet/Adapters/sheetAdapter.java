@@ -117,7 +117,9 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
                 public void afterTextChanged(Editable s) {
                     SheetModelList item = sheetList.get((getAdapterPosition()));
                     item.setLength(s.toString());
-                    result.setText(performCalculations(item));
+                    String currentResult = performCalculations(item);
+                    result.setText(currentResult);
+                    sheetList.get(getAdapterPosition()).setResult(currentResult);
                     calculateSubtotal();
                 }
 
@@ -138,7 +140,9 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
                 public void afterTextChanged(Editable s) {
                     SheetModelList item = sheetList.get((getAdapterPosition()));
                     item.setWidth(s.toString());
-                    result.setText(performCalculations(item));
+                    String currentResult = performCalculations(item);
+                    result.setText(currentResult);
+                    sheetList.get(getAdapterPosition()).setResult(currentResult);
                     calculateSubtotal();
                 }
             });
@@ -207,20 +211,27 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
 
 
     public void copyPreviousRow() {
-        String length = "", width = "", result = "";
+        SheetModelList item = new SheetModelList();
         int index = 0;
-        for (int i = 0; i < sheetList.size(); i++) {
-            result = sheetList.get(i).getResult();
-            if (!result.equals("")) {
-                index = i;
-                length = sheetList.get(i).getLength();
-                width = sheetList.get(i).getWidth();
+
+            for (int i = 0; i < sheetList.size(); i++) {
+                item.setResult(sheetList.get(i).getResult());
+                if (!item.getResult().equals("")) {
+                    index = i;
+                    item.setLength(sheetList.get(i).getLength());
+                    item.setWidth(sheetList.get(i).getWidth());
+                }
             }
-        }
-        sheetList.get(index + 1).setLength(length);
-        sheetList.get(index + 1).setWidth(width);
-        notifyDataSetChanged();
-        Toast.makeText(context, "Index: " + index + "\nLength: " + length + "\nWidth: " + width, Toast.LENGTH_SHORT).show();
+            if (sheetList.size() > index + 1) {
+                if(sheetList.get(index + 1).getResult().equals("") && sheetList.get(index + 1).getLength().equals("") && sheetList.get(index + 1).getWidth().equals("")) {
+                    sheetList.get(index + 1).setLength(item.getLength());
+                    sheetList.get(index + 1).setWidth(item.getWidth());
+                }
+            } else {
+                Toast.makeText(context, "Please add an empty row to duplicate previous one", Toast.LENGTH_SHORT).show();
+            }
+            notifyDataSetChanged();
+
     }
 
     public void saveSheetToDatabase(String getSheetType, String date, String partyName) {

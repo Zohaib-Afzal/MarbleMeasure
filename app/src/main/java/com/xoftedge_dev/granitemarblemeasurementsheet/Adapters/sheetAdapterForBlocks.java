@@ -117,7 +117,9 @@ public class sheetAdapterForBlocks extends RecyclerView.Adapter<sheetAdapterForB
                 public void afterTextChanged(Editable editable) {
                     SheetModelForBlocks item = sheetListForBlocks.get((getAdapterPosition()));
                     item.setLength(editable.toString());
-                    result.setText(performCalculations(item));
+                    String currentResult = performCalculations(item);
+                    result.setText(currentResult);
+                    sheetListForBlocks.get(getAdapterPosition()).setResult(currentResult);
                     calculateSubtotal();
                 }
             });
@@ -137,7 +139,9 @@ public class sheetAdapterForBlocks extends RecyclerView.Adapter<sheetAdapterForB
                 public void afterTextChanged(Editable editable) {
                     SheetModelForBlocks item = sheetListForBlocks.get((getAdapterPosition()));
                     item.setWidth(editable.toString());
-                    result.setText(performCalculations(item));
+                    String currentResult = performCalculations(item);
+                    result.setText(currentResult);
+                    sheetListForBlocks.get(getAdapterPosition()).setResult(currentResult);
                     calculateSubtotal();
                 }
             });
@@ -157,7 +161,9 @@ public class sheetAdapterForBlocks extends RecyclerView.Adapter<sheetAdapterForB
                 public void afterTextChanged(Editable editable) {
                     SheetModelForBlocks item = sheetListForBlocks.get((getAdapterPosition()));
                     item.setHeight(editable.toString());
-                    result.setText(performCalculations(item));
+                    String currentResult = performCalculations(item);
+                    result.setText(currentResult);
+                    sheetListForBlocks.get(getAdapterPosition()).setResult(currentResult);
                     calculateSubtotal();
                 }
             });
@@ -234,24 +240,32 @@ public class sheetAdapterForBlocks extends RecyclerView.Adapter<sheetAdapterForB
     }
 
     public void copyPreviousRow() {
-        String length="", width ="", result = "", height = "";
+        SheetModelForBlocks item = new SheetModelForBlocks();
+        item.setHeight("");
+        item.setWidth("");
         int index = 0;
-        for (int i=0; i<sheetListForBlocks.size(); i++){
-            result = sheetListForBlocks.get(i).getResult();
-            if (!result.equals("")){
-                index = i;
-                length = sheetListForBlocks.get(i).getLength();
-                width = sheetListForBlocks.get(i).getWidth();
-                height = sheetListForBlocks.get(i).getHeight();
+            for (int i = 0; i < sheetListForBlocks.size(); i++) {
+                item.setResult(sheetListForBlocks.get(i).getResult());
+                if (!item.getResult().equals("")) {
+                    index = i;
+                    item.setLength(sheetListForBlocks.get(i).getLength());
+                    item.setWidth(sheetListForBlocks.get(i).getWidth());
+                    item.setHeight(sheetListForBlocks.get(i).getHeight());
+                }
             }
-        }
 
-        sheetListForBlocks.get(index+1).setLength(length);
-        sheetListForBlocks.get(index+1).setWidth(width);
-        sheetListForBlocks.get(index+1).setHeight(height);
-        notifyDataSetChanged();
+            if (sheetListForBlocks.size() > index + 1) {
+                if(sheetListForBlocks.get(index + 1).getResult().equals("") && sheetListForBlocks.get(index + 1).getLength().equals("") && sheetListForBlocks.get(index + 1).getWidth().equals("") && sheetListForBlocks.get(index + 1).getHeight().equals("")) {
+                    sheetListForBlocks.get(index + 1).setLength(item.getLength());
+                    sheetListForBlocks.get(index + 1).setWidth(item.getWidth());
+                    sheetListForBlocks.get(index + 1).setHeight(item.getHeight());
+                }
 
-        Toast.makeText(context, "Index: "+ index +"\nLength: "+length+"\nWidth: "+width, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Please add an empty row to duplicate previous one", Toast.LENGTH_SHORT).show();
+            }
+            notifyDataSetChanged();
+
     }
 
     public void saveSheetToDatabase(String getSheetType, String date, String partyName) {
