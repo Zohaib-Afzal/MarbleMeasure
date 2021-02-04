@@ -286,8 +286,7 @@ public class sheetAdapterForBlocks extends RecyclerView.Adapter<sheetAdapterForB
     }
 
     private void saveAsPdf(List<SheetModelForBlocks> listForPdf, String getSheetType, String date, String partyName) {
-
-
+        Double subTotal = roundTotal(total,4);
         File graniteMarbleFolder = new File(context.getExternalFilesDir("/") + "/MasterMarble");
 
         if (!graniteMarbleFolder.exists()){
@@ -356,8 +355,11 @@ public class sheetAdapterForBlocks extends RecyclerView.Adapter<sheetAdapterForB
             document.add(paragraph);
             Paragraph paragraph1 = new Paragraph(date+"\n\n", g);
             paragraph1.setAlignment(Element.ALIGN_CENTER);
+            Paragraph total = new Paragraph("Sub Total: " + subTotal  + "\n\n", g);
+            total.setAlignment(Element.ALIGN_LEFT);
             document.add(paragraph1);
             document.add(table);
+            document.add(total);
             document.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

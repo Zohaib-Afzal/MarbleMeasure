@@ -55,7 +55,7 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
     String sheetNo;
     private File pdfFile;
     long rows;
-    public static Double total = 0.0;
+   public static Double total = 0.0;
     DatabaseHelper databaseHelper;
 
     public sheetAdapter(Context context, List<SheetModelList> sheetList) {
@@ -264,6 +264,7 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
     }
 
     private void saveAsPdf(List<SheetModelList> listForPdf, String getType, String date, String partyName) {
+        Double subTotal = roundTotal(total,4);
         File graniteMarbleFolder = new File(context.getExternalFilesDir("/") + "/MasterMarble");
         if (!graniteMarbleFolder.exists()) {
             graniteMarbleFolder.mkdir();
@@ -293,7 +294,6 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
                 cells[j].setBackgroundColor(BaseColor.GRAY);
             }
             for (int i = 0; i < listForPdf.size(); i = i + 1) {
-
                 String serial = String.valueOf(listForPdf.get(i).getId());
                 String length = listForPdf.get(i).getLength();
                 String width = listForPdf.get(i).getWidth();
@@ -323,8 +323,11 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
             document.add(paragraph);
             Paragraph paragraph1 = new Paragraph(date + "\n\n", g);
             paragraph1.setAlignment(Element.ALIGN_CENTER);
+            Paragraph total = new Paragraph("Sub Total: " + subTotal  + "\n\n", g);
+            total.setAlignment(Element.ALIGN_LEFT);
             document.add(paragraph1);
             document.add(table);
+            document.add(total);
             document.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -351,12 +354,7 @@ public class sheetAdapter extends RecyclerView.Adapter<sheetAdapter.ViewHolder> 
         sheetListForPdf.clear();
 
     }
-
     private double roundTotal(double value, int scale) {
         return Math.round(value * Math.pow(10, scale)) / Math.pow(10, scale);
-    }
-
-    private String round(double value, int scale) {
-        return String.valueOf(Math.round(value * Math.pow(10, scale)) / Math.pow(10, scale));
     }
 }
